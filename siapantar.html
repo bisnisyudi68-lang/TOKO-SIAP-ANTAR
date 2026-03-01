@@ -198,10 +198,23 @@ let marker;
 
 var map=L.map('map').setView([tokoLat,tokoLng],15);
 
-L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-{ attribution:'&copy; OpenStreetMap contributors'}
+// Layer Normal
+var normalLayer = L.tileLayer(
+ 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+ { attribution:'&copy; OpenStreetMap contributors'}
 ).addTo(map);
+
+// Layer Satelit
+var satelliteLayer = L.tileLayer(
+ 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+ { attribution:'Tiles © Esri'}
+);
+
+// Tombol pilih layer
+L.control.layers({
+ "Normal": normalLayer,
+ "Satelit": satelliteLayer
+}).addTo(map);
 
 L.marker([tokoLat,tokoLng])
 .addTo(map)
@@ -229,21 +242,39 @@ function gunakanLokasi(){
 }
 
 function setLokasi(lat,lng){
- tujuanLat=lat;
- tujuanLng=lng;
+    tujuanLat = lat;
+    tujuanLng = lng;
 
- if(marker) map.removeLayer(marker);
+    if(marker) map.removeLayer(marker);
 
- marker=L.marker([lat,lng])
- .addTo(map)
- .bindPopup("Pesanan akan di kirim ke lokasi ini")
- .openPopup();
+    marker = L.marker([lat,lng])
+    .addTo(map)
+    .bindPopup("Pesanan akan di kirim ke lokasi ini")
+    .openPopup();
 
- map.setView([lat,lng],17);
+    map.setView([lat,lng],17);
 
- hitungZona();
+    // Ambil desa & kecamatan otomatis
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+    .then(res => res.json())
+    .then(data => {
+
+        let desa = data.address.village || 
+                   data.address.hamlet || 
+                   data.address.suburb || "-";
+
+        let kecamatan = data.address.subdistrict || 
+                        data.address.county || "-";
+
+        window.namaDesa = desa;
+        window.namaKecamatan = kecamatan;
+
+        console.log("Desa:", desa);
+        console.log("Kecamatan:", kecamatan);
+    });
+
+    hitungZona();
 }
-
 
 // ================= HITUNG ZONA =================
 function hitungZona(){
@@ -339,7 +370,10 @@ function proses(){
 
  let tanggal=new Date().toLocaleDateString("id-ID");
  let orderId=Date.now();
-
+if(!noWa || noWa.trim() == ""){
+    alert("Silahkan isi nomor WhatsApp terlebih dahulu.");
+    return;
+}
  let pesan=
 "━━━━━━━━━━━━━━━━━━━━\n"+
 "🧾 INVOICE PESANAN MASUK\n"+
@@ -361,7 +395,9 @@ detail+
 "TOTAL BAYAR  : Rp"+totalBayar.toLocaleString()+"\n\n"+
 "━━━━━━━━━━━━━━━━━━━━\n"+
 "📍 Titik Lokasi Pembeli\n"+
-"━━━━━━━━━━━━━━━━━━━━\n"+
+"____________________________\n"+
+"Desa       : "+(window.namaDesa || "-")+"\n"+
+"Kecamatan  : "+(window.namaKecamatan || "-")+"\n"+
 linkMaps+"\n\n"+
 "⚠️ Mohon cek kembali detail pesanan sebelum diproses.\n"+
 "━━━━━━━━━━━━━━━━━━━━";
