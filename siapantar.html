@@ -450,28 +450,25 @@ linkMaps+"\n\n"+
  );
 }
 // ================= BALAS OTOMATIS KE PEMBELI =================
-
-let noPembeli = noWa.replace(/\D/g,''); // hapus semua selain angka
+let noPembeli = noWa.replace(/\D/g,'');
 if(noPembeli.startsWith("0")){
   noPembeli = noPembeli.replace(/^0/,"62");
 }
+
 let pesanBalasan =
 "Halo 👋\n\n"+
 "Pesanan Anda sudah kami terima.\n"+
 "Admin akan segera memproses pesanan Anda.\n\n"+
 "Terima kasih telah berbelanja 🙏";
 
-if(noPembeli.length < 10){
-  alert("Nomor WhatsApp tidak valid!");
-  return;
+if(noPembeli.length >= 10){
+  setTimeout(function(){
+    window.open(
+      "https://wa.me/"+noPembeli+"?text="+encodeURIComponent(pesanBalasan),
+      "_blank"
+    );
+  },2000);
 }
-setTimeout(function(){
-  window.open(
-    "https://wa.me/"+noPembeli+"?text="+encodeURIComponent(pesanBalasan),
-    "_blank"
-  );
-}, 2000);
-
 // ================= SCROLL =================
 function scrollToTop(){
  window.scrollTo({top:0,behavior:'smooth'});
