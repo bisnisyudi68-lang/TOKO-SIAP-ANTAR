@@ -256,10 +256,49 @@ footer{
     .hero h2{
         font-size:20px;
     }
+#cartFloat{
+ position:fixed;
+ bottom:25px;
+ right:20px;
+ background:linear-gradient(145deg,#16a34a,#15803d);
+ color:white;
+ padding:12px 18px;
+ border-radius:50px;
+ font-weight:600;
+ box-shadow:0 8px 20px rgba(0,0,0,0.25);
+ cursor:pointer;
+ z-index:9999;
+ display:flex;
+ align-items:center;
+ gap:8px;
+}
+
+#cartCount{
+ background:#ff9800;
+ padding:3px 8px;
+ border-radius:50px;
+ font-size:12px;
+}
 }
 </style>
 </head>
+<div id="cartFloat" onclick="window.location.href='cart.html'">
+🛒 <span id="cartCount">0</span>
+</div>
+<script>
+function updateCartCount(){
+ let cart = JSON.parse(localStorage.getItem("cart")) || [];
+ let totalItem = 0;
 
+ cart.forEach(p=>{
+  totalItem += p.qty;
+ });
+
+ document.getElementById("cartCount").innerText = totalItem;
+}
+
+updateCartCount();
+</script>
 <body>
 
 <!-- HEADER -->
@@ -281,9 +320,13 @@ footer{
 </a>
 </div>
   <div class="menu-pro">
-  <a href="persamaan.html" class="pro-btn">Persamaan LCD</a>
-  <a href="#service" class="pro-btn">Kode Ic</a>
-  <a href="#teknisi" class="pro-btn">Kode Tipe Hp</a>
+ <div class="menu-pro">
+  <a href="kategori.html?kategori=LCD">📱 LCD</a>
+  <a href="kategori.html?kategori=BATERAI">🔋 Baterai</a>
+  <a href="kategori.html?kategori=IC">🧩 IC</a>
+  <a href="kategori.html?kategori=SPEAKER">🔊 Speaker</a>
+  <a href="cart.html">🛒 Keranjang</a>
+</div>
   <a href="#lokasi" class="pro-btn">analisa kerusakan</a>
   <a href="#kontak" class="pro-btn">Kontak</a>
   </div>
