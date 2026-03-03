@@ -6,151 +6,256 @@
 <title>A YUDI THEA | Servis Handphone</title>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#f4f6f9;
-  color:#333;
+.btn-modern {
+  display: inline-block;
+  padding: 14px 22px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  color: #fff;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
 }
 
-/* HEADER */
+/* Hijau */
+.btn-green {
+  background: linear-gradient(145deg, #16a34a, #15803d);
+}
+
+/* Orange */
+.btn-orange {
+  background: linear-gradient(145deg, #f59e0b, #ea580c);
+}
+
+/* Hover effect */
+.btn-modern:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* Saat ditekan */
+.btn-modern:active {
+  transform: scale(0.96);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* Efek kilau */
+.btn-modern::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -100%;
+  width: 60%;
+  height: 200%;
+  background: rgba(255,255,255,0.2);
+  transform: rotate(25deg);
+  transition: 0.6s;
+}
+
+.btn-modern:hover::after {
+  left: 120%;
+}
+/* ===== RESET ===== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    color:#333;
+}
+
+/* ===== COLOR SYSTEM ===== */
+:root{
+    --primary:#1faa59;       /* hijau logo */
+    --primary-dark:#178a47;
+    --accent:#ff9800;        /* orange logo */
+    --accent-dark:#e68900;
+    --dark:#1e1e1e;
+    --light:#ffffff;
+}
+
+/* ===== HEADER ===== */
 .header{
-  background:linear-gradient(135deg,#0d6efd,#198754);
-  color:white;
-  text-align:center;
-  padding:60px 20px;
+    background:#ffffff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:420px;
+    position:relative;
 }
 
 .header img{
-  width:120px;
-  height:120px;
-  object-fit:cover;
-  border-radius:50%;
-  border:4px solid white;
-  box-shadow:0 8px 20px rgba(0,0,0,0.3);
-  margin-bottom:15px;
-}
-transition:0.4s;
+    width:90%;
+    max-width:480px;
+    height:auto;
+    transition:0.4s ease;
 }
 
 .header img:hover{
-  transform:scale(1.05);
-}
-.header h1{
-  margin:0;
-  font-size:26px;
+    transform:scale(1.05);
 }
 
-.header p{
-  margin:8px 0 0;
-  font-size:14px;
-  opacity:0.9;
+.header::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:4px;
+    background:linear-gradient(90deg,var(--primary),var(--accent));
 }
 
-/* HERO */
+/* ===== HERO SECTION ===== */
 .hero{
-  padding:30px 20px;
-  text-align:center;
-  background:white;
+    padding:40px 20px;
+    text-align:center;
+    background:#ffffff;
 }
 
 .hero h2{
-  margin:0;
-  color:#0d6efd;
+    color:var(--primary);
+    font-size:26px;
+    margin-bottom:10px;
 }
 
 .hero p{
-  margin:10px 0;
-  color:#666;
+    color:#666;
+    margin-bottom:25px;
 }
 
+/* ===== PROMO BAR ===== */
 .promo{
-  background:#198754;
-  color:white;
-  padding:15px;
-  border-radius:12px;
-  font-weight:bold;
-  margin-top:15px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    background:linear-gradient(90deg,var(--primary),var(--primary-dark));
+    color:white;
+    padding:14px;
+    border-radius:12px;
+    margin:15px auto;
+    max-width:600px;
+    font-weight:500;
+    box-shadow:0 8px 20px rgba(0,0,0,0.1);
 }
 
+/* ===== MAIN BUTTON ===== */
 .btn{
-  display:inline-block;
-  margin-top:20px;
-  padding:14px 25px;
-  background:linear-gradient(45deg,#0d6efd,#2563eb);
-  color:white;
-  text-decoration:none;
-  border-radius:12px;
-  font-weight:bold;
-  box-shadow:0 6px 15px rgba(0,0,0,0.2);
-  transition:0.3s;
+    display:inline-block;
+    padding:14px 28px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-dark));
+    color:white;
+    text-decoration:none;
+    border-radius:50px;
+    font-weight:600;
+    margin:15px 0;
+    box-shadow:0 8px 25px rgba(0,0,0,0.15);
+    transition:0.3s;
 }
 
 .btn:hover{
-  transform:scale(1.05);
+    transform:translateY(-3px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.2);
 }
 
-/* SECTION */
-.section{
-  padding:40px 20px;
+/* ===== MENU BUTTONS ===== */
+.menu-pro{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:12px;
+    margin-top:20px;
 }
 
-.section h3{
-  margin-top:0;
+.menu-pro a{
+    padding:10px 20px;
+    background:var(--primary);
+    color:white;
+    border-radius:30px;
+    text-decoration:none;
+    font-size:14px;
+    transition:0.3s;
 }
 
+.menu-pro a:hover{
+    background:var(--accent);
+}
+
+/* ===== CARD SECTION ===== */
 .card{
-  background:white;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+    background:white;
+    padding:25px;
+    margin:30px auto;
+    border-radius:18px;
+    max-width:900px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* MAP */
-.map{
-  width:100%;
-  height:260px;
-  border-radius:20px;
-  border:4px solid #f0f0f0;
+.card h3{
+    text-align:center;
+    margin-bottom:20px;
+    color:var(--dark);
 }
 
-/* FOOTER */
-.footer{
-  background:#111;
-  color:white;
-  text-align:center;
-  padding:20px;
-  font-size:13px;
-  margin-top:30px;
+.card ul{
+    list-style:none;
+    line-height:2;
 }
 
-/* FLOATING WA */
-.wa-float{
-  position:fixed;
-  bottom:25px;
-  right:15px;
-  background:#25d366;
-  color:white;
-  width:55px;
-  height:55px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:26px;
-  text-decoration:none;
-  box-shadow:0 5px 15px rgba(0,0,0,0.3);
-}
-.keunggulan{
-  list-style:none;
-  padding:0;
-  margin-top:15px;
+/* ===== MAP ===== */
+.map-section{
+    margin:40px auto;
+    max-width:1000px;
+    padding:0 20px;
 }
 
-.keunggulan li{
-  padding:8px 0;
-  font-size:15px;
+.map-container{
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.map-btn{
+    display:inline-block;
+    margin-top:15px;
+    padding:12px 25px;
+    background:var(--primary);
+    color:white;
+    border-radius:30px;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.map-btn:hover{
+    background:var(--primary-dark);
+}
+
+/* ===== FOOTER ===== */
+footer{
+    background:var(--dark);
+    color:white;
+    text-align:center;
+    padding:25px;
+    margin-top:50px;
+    font-size:14px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+    .header{
+        height:320px;
+    }
+
+    .header img{
+        max-width:320px;
+    }
+
+    .hero h2{
+        font-size:20px;
+    }
 }
 </style>
 </head>
@@ -160,9 +265,7 @@ transition:0.4s;
 <!-- HEADER -->
 <div class="header">
   <!-- Nanti ganti logo.jpg -->
-  <img src="logo.jpg" alt="Logo Toko">
-  <h1>A YUDI THEA</h1>
-  <p>Servis Handphone • Accessories • Sparepart</p>
+ <img src="logo2.png" class="logo" alt="Toko Siap Antar">
 </div>
 
 <!-- HERO -->
@@ -170,21 +273,27 @@ transition:0.4s;
   <h2>🔧 Spesialis LCD, Baterai & IC Handphone</h2>
   <p>Ready Stock • Harga Grosir • Bergaransi</p>
 
-  <div class="promo">
-    🚚 Pesanan Anda Siap Kami Antar Dalam 1 Jam*
+ <a href="#" class="btn-modern btn-green">
+🚚 Estimasi pengiriman 2 / 3 hari →
+</a>
+ <a href="siapantar.html" class="btn-modern btn-orange">
+📦 Minimal 20pcs setiap pengambilan →
+</a>
+</div>
+  <div class="menu-pro">
+  <a href="persamaan.html" class="pro-btn">Persamaan LCD</a>
+  <a href="#service" class="pro-btn">Kode Ic</a>
+  <a href="#teknisi" class="pro-btn">Kode Tipe Hp</a>
+  <a href="#lokasi" class="pro-btn">analisa kerusakan</a>
+  <a href="#kontak" class="pro-btn">Kontak</a>
   </div>
-
-  <a href="pesanan.html" class="btn">Lihat Produk dan Pesan sekarang</a>
-</div>
-  <a href="invoice.html" class="btn">Pengambilan lcd tempo”</a>
-</div>
 <div class="section">
   <div class="card">
     <h3 style="text-align:center;">Kenapa Pilih Kami?</h3>
     <ul class="keunggulan">
       <li>✅ Ready Stock Banyak</li>
       <li>✅ Harga Grosir</li>
-      <li>✅ Bisa Pasang Langsung</li>
+      <li>✅ Bisa Di Antar Dalam 1 Jam</li>
       <li>✅ Bergaransi</li>
     </ul>
   </div>
@@ -214,14 +323,3 @@ transition:0.4s;
 <div class="footer">
   © 2026 A YUDI THEA <br>
   Pecinanlama | WA: 082319264646
-</div>
-
-<!-- FLOAT WA -->
-<a href="https://wa.me/6282319264646"
-   class="wa-float"
-   target="_blank">
-   💬
-</a>
-
-</body>
-</html>
