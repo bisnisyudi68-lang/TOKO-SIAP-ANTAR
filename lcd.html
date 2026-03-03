@@ -62,6 +62,8 @@ button{
 <body>
 
 <header>📱 Produk LCD</header>
+<input type="text" id="searchInput" placeholder="🔍 Cari produk..." onkeyup="renderProduk()" 
+style="width:95%;margin:10px;padding:10px;border-radius:8px;border:1px solid #ccc;">
 
 <div id="listProduk"></div>
 
@@ -104,43 +106,48 @@ fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${sheetNa
 
 // ================= RENDER PRODUK =================
 function renderProduk(){
-  let list = document.getElementById("listProduk");
-  list.innerHTML = "";
 
-  semuaProduk.forEach(p => {
+ let keyword = document.getElementById("searchInput").value.toLowerCase();
+ let list = document.getElementById("listProduk");
+ list.innerHTML = "";
 
-    let item = cart.find(c => c.kode === p.kode);
-    let qty = item ? item.qty : 0;
+ semuaProduk
+ .filter(p =>
+   p.nama.toLowerCase().includes(keyword) ||
+   p.kode.toLowerCase().includes(keyword)
+ )
+ .forEach(p=>{
 
-    let div = document.createElement("div");
-    div.className = "card";
+   let itemCart = cart.find(c=>c.kode===p.kode);
+   let qty = itemCart ? itemCart.qty : 0;
 
-    div.innerHTML = `
-      <b>${p.nama}</b><br>
-      ${p.kode}<br>
-      <span class="harga">Rp ${rupiah(p.harga)}</span>
-    `;
+   let div=document.createElement("div");
+   div.className="card";
 
-    if(qty === 0){
-      let btn = document.createElement("button");
-      btn.innerText = "+ Tambah";
-      btn.onclick = () => tambah(p);
-      div.appendChild(btn);
-    } else {
-      let box = document.createElement("div");
-      box.className = "qtyBox";
-      box.innerHTML = `
-        <button onclick="kurang('${p.kode}')">-</button>
-        <span style="margin:0 10px">${qty}</span>
-        <button onclick="tambahQty('${p.kode}')">+</button>
-      `;
-      div.appendChild(box);
-    }
+   div.innerHTML = `
+     <b>${p.nama}</b><br>
+     ${p.kode}<br>
+     <span class="harga">Rp ${rupiah(p.harga)}</span>
+   `;
 
-    list.appendChild(div);
-  });
+   if(qty===0){
+     let btn=document.createElement("button");
+     btn.innerText="+ Tambah";
+     btn.onclick=()=>tambahProduk(p);
+     div.appendChild(btn);
+   }else{
+     div.innerHTML += `
+       <br>
+       <button onclick="kurang('${p.kode}')">-</button>
+       ${qty}
+       <button onclick="tambah('${p.kode}')">+</button>
+     `;
+   }
+
+   list.appendChild(div);
+ });
+
 }
-
 // ================= CART =================
 function tambah(p){
   cart.push({...p, qty:1});
