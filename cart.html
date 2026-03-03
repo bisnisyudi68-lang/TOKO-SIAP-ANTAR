@@ -37,7 +37,7 @@ input{width:95%;margin:10px;padding:10px;border-radius:8px;border:1px solid #ccc
 
 <input type="tel" id="waPembeli" placeholder="Nomor WhatsApp Aktif">
 
-<div class="checkout" onclick="checkout()">Checkout WhatsApp</div>
+<div class="checkout" onclick="lanjutBayar()">Checkout</div>
 <div class="clearBtn" onclick="kosongkan()">Kosongkan Keranjang</div>
 
 <script>
@@ -101,6 +101,9 @@ function kurang(i){ cart[i].qty--; if(cart[i].qty<=0) cart.splice(i,1); simpan()
 function hapus(i){ cart.splice(i,1); simpan(); }
 function kosongkan(){ localStorage.removeItem("cart"); location.reload(); }
 function simpan(){ localStorage.setItem("cart",JSON.stringify(cart)); renderCart(); }
+function lanjutBayar(){
+  window.location.href = "bayar.html";
+}
 
 // ================= MAP =================
 var map = L.map('map').setView([tokoLat,tokoLng],15);
