@@ -76,14 +76,18 @@ function renderCart(){
   </div>`;
  });
 
- list.innerHTML+=`<div class="card"><b>Total Belanja: Rp ${rupiah(total)}</b></div>`;
-}
+ let totalBayar = total + ongkir;
 
-function tambah(i){cart[i].qty++;simpan();}
-function kurang(i){cart[i].qty--;if(cart[i].qty<=0)cart.splice(i,1);simpan();}
-function hapus(i){cart.splice(i,1);simpan();}
-function kosongkan(){localStorage.removeItem("cart");location.reload();}
-function simpan(){localStorage.setItem("cart",JSON.stringify(cart));renderCart();}
+ list.innerHTML+=`
+ <div class="card">
+   <b>Total Barang : Rp ${rupiah(total)}</b><br>
+   <b>Ongkir       : Rp ${rupiah(ongkir)}</b><br>
+   <hr>
+   <b style="color:#15803d;font-size:18px">
+   TOTAL BAYAR : Rp ${rupiah(totalBayar)}
+   </b>
+ </div>`;
+}
 
 // ================= MAP =================
 var map=L.map('map').setView([tokoLat,tokoLng],14);
