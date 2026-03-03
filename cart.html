@@ -44,6 +44,11 @@ input{width:95%;margin:10px;padding:10px;border-radius:8px;border:1px solid #ccc
 // ================= DATA CART =================
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+let tujuanLat = null;
+let tujuanLng = null;
+let ongkir = 0;
+let jarakFix = 0;
+let minimalBelanja = 0;   // ✅ INI LANGKAH 1
 function rupiah(a){ return Math.round(a).toLocaleString("id-ID"); }
 
 // ================= RENDER CART =================
@@ -159,48 +164,96 @@ function setLokasi(lat,lng){
 }
 
 function hitungOngkir(){
- let jarak=map.distance([tokoLat,tokoLng],[tujuanLat,tujuanLng])/1000;
- ongkir=Math.round(jarak*2000);
- if(ongkir<10000) ongkir=10000;
 
- renderCart();
+  jarakFix = map.distance(
+    [tokoLat,tokoLng],
+    [tujuanLat,tujuanLng]
+  ) / 1000;
 
- document.getElementById("infoZona").innerHTML=
- "Jarak: "+jarak.toFixed(1)+" km<br>"+
- "Ongkir: Rp"+rupiah(ongkir)+"<br>"+
- "Desa: "+namaDesa+"<br>"+
- "Kecamatan: "+namaKecamatan;
+  // Ongkir
+  ongkir = Math.round(jarakFix * 2000);
+  if(ongkir < 10000) ongkir = 10000;
+
+  // ===== MINIMAL BELANJA BERDASARKAN JARAK =====
+  if(jarakFix <= 10) minimalBelanja = 0;
+  else if(jarakFix <= 20) minimalBelanja = 200000;
+  else if(jarakFix <= 30) minimalBelanja = 300000;
+  else if(jarakFix <= 40) minimalBelanja = 500000;
+  else minimalBelanja = 700000;
+
+  renderCart();
+
+  document.getElementById("infoZona").innerHTML =
+    "Jarak: " + jarakFix.toFixed(1) + " km<br>" +
+    "Ongkir: Rp" + rupiah(ongkir) + "<br>" +
+    "Minimal Belanja: Rp" + rupiah(minimalBelanja) + "<br>" +
+    "Desa: " + (window.namaDesa || "-") + "<br>" +
+    "Kecamatan: " + (window.namaKecamatan || "-");
 }
-
 // ================= CHECKOUT =================
 function checkout(){
 
- if(cart.length==0){ alert("Keranjang kosong"); return; }
- if(!tujuanLat){ alert("Pilih lokasi dulu"); return; }
+  // 1️⃣ Cek keranjang
+  if(cart.length === 0){
+    alert("Keranjang kosong");
+    return;
+  }
 
- let noWa=document.getElementById("waPembeli").value.trim();
- if(!noWa){ alert("Isi nomor WA dulu"); return; }
+  // 2️⃣ Cek lokasi
+  if(!tujuanLat || !tujuanLng){
+    alert("Pilih lokasi dulu");
+    return;
+  }
 
- let total=0,totalItem=0,detail="";
- cart.forEach(p=>{
-   let sub=p.harga*p.qty;
-   total+=sub;
-   totalItem+=p.qty;
-   detail+=`• ${p.nama}\n  Qty: ${p.qty}\n  Harga: Rp${rupiah(sub)}\n\n`;
- });
+  // 3️⃣ Hitung total barang
+  let total = 0;
+  let totalItem = 0;
 
- let totalBayar=total+ongkir;
- let now=new Date();
- let orderId=Date.now();
+  cart.forEach(p=>{
+    total += p.harga * p.qty;
+    totalItem += p.qty;
+  });
 
- let nomorHarian=
- now.getFullYear().toString().slice(-2)+
- (now.getMonth()+1).toString().padStart(2,'0')+
- now.getDate().toString().padStart(2,'0')+"-"+
- now.getHours().toString().padStart(2,'0')+
- now.getMinutes().toString().padStart(2,'0');
+  // 4️⃣ Cek minimal belanja berdasarkan jarak
+  if(minimalBelanja > 0 && total < minimalBelanja){
+    alert("Minimal belanja Rp" + rupiah(minimalBelanja) + " untuk jarak ini");
+    return;
+  }
 
- let pesan=
+  // 5️⃣ Cek nomor WA
+  let noWa = document.getElementById("waPembeli").value.trim();
+  if(!noWa){
+    alert("Isi nomor WA dulu");
+    return;
+  }
+
+  // 6️⃣ Buat detail produk
+  let detail = "";
+
+  cart.forEach(p=>{
+    let sub = p.harga * p.qty;
+    detail +=
+      "• " + p.nama + "\n" +
+      "  Qty: " + p.qty + "\n" +
+      "  Harga: Rp" + rupiah(sub) + "\n\n";
+  });
+
+  // 7️⃣ Total bayar
+  let totalBayar = total + ongkir;
+
+  // 8️⃣ Buat nomor order
+  let now = new Date();
+  let orderId = Date.now();
+
+  let nomorHarian =
+    now.getFullYear().toString().slice(-2) +
+    (now.getMonth()+1).toString().padStart(2,'0') +
+    now.getDate().toString().padStart(2,'0') + "-" +
+    now.getHours().toString().padStart(2,'0') +
+    now.getMinutes().toString().padStart(2,'0');
+
+  // ===== LANJUT DI SINI =====
+  let pesan =
 "━━━━━━━━━━━━━━━━━━━━\n"+
 "🏪 TOKO SIAP ANTAR\n"+
 "━━━━━━━━━━━━━━━━━━━━\n"+
