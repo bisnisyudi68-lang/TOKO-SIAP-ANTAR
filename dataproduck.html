@@ -236,6 +236,7 @@ WA: 082319264646
 
 <!-- SCRIPT CART -->
 <script>
+
 function updateCartCount(){
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let total=0;
@@ -248,6 +249,23 @@ document.getElementById("cartCount").innerText=total;
 }
 
 updateCartCount();
+function convertDrive(link){
+
+if(!link) return "";
+
+let id = "";
+
+if(link.includes("id=")){
+id = link.split("id=")[1];
+}
+
+if(link.includes("/d/")){
+id = link.split("/d/")[1].split("/")[0];
+}
+
+return "https://drive.google.com/uc?export=view&id="+id;
+
+}
 </script>
 
 <!-- SCRIPT PRODUK GOOGLE SHEET -->
@@ -270,8 +288,7 @@ rows.forEach(r=>{
 
 let nama = r.c[1]?.v;
 let harga = r.c[7]?.v;
-let foto = r.c[9]?.v;
-
+let foto = convertDrive(r.c[9]?.v);
 if(!nama) return;
 
 html += `
