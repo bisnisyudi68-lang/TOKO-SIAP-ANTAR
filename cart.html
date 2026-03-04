@@ -148,7 +148,16 @@ L.control.layers({
 "Satelit + Nama":satelliteWithLabel
 }).addTo(map);
 
-L.marker([tokoLat,tokoLng]).addTo(map).bindPopup("Lokasi Toko").openPopup();
+var tokoIcon = L.icon({
+iconUrl: "https://cdn-icons-png.flaticon.com/512/535/535137.png",
+iconSize:[35,35],
+iconAnchor:[17,35]
+});
+
+L.marker([tokoLat,tokoLng],{icon:tokoIcon})
+.addTo(map)
+.bindPopup("🏪 Lokasi Toko")
+.openPopup();
 
 map.on('click',function(e){
   setLokasi(e.latlng.lat,e.latlng.lng);
