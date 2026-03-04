@@ -172,7 +172,29 @@ function gunakanLokasi(){
 function setLokasi(lat,lng){
   tujuanLat = lat;
   tujuanLng = lng;
+if(window.garis) map.removeLayer(window.garis);
 
+window.garis = L.polyline(
+[
+[tokoLat,tokoLng],
+[lat,lng]
+],
+{
+color:"#15803d",
+weight:4
+}
+).addTo(map);
+if(window.radius) map.removeLayer(window.radius);
+
+window.radius = L.circle(
+[tokoLat,tokoLng],
+{
+radius:30000,
+color:"#f97316",
+fillColor:"#f97316",
+fillOpacity:0.08
+}
+).addTo(map);
   if(markerUser) map.removeLayer(markerUser);
 
   markerUser = L.marker([lat,lng])
