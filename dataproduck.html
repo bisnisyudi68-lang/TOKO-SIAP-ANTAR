@@ -248,32 +248,27 @@ document.getElementById("cartCount").innerText=total;
 }
 
 updateCartCount();
+<!-- SCRIPT PRODUK GOOGLE SHEET -->
 <script>
 
-const sheetURL =
-"https://docs.google.com/spreadsheets/d/19AfachAS9ZyNuut61RB1wqyI_AI6BsmNT1SIWhmSIn8/gviz/tq?sheet=MEMBER";
+const sheetURL="https://docs.google.com/spreadsheets/d/19AfachAS9ZyNuut61RB1wqyI_AI6BsmNT1SIWhmSIn8/gviz/tq?tqx=out:csv&sheet=MEMBER";
 
 fetch(sheetURL)
-.then(res => res.text())
-.then(data => {
+.then(res=>res.text())
+.then(data=>{
 
-const json = JSON.parse(
-data.substring(47).slice(0,-2)
-);
+let rows=data.split("\n").slice(1);
+let html="";
 
-let rows = json.table.rows;
+rows.forEach(row=>{
 
-let html = "";
+let col=row.split(",");
 
-rows.forEach(r=>{
+let nama=col[1];
+let harga=col[3];
+let foto=col[5];
 
-let nama = r.c[1]?.v;
-let harga = r.c[7]?.v;
-let foto = r.c[9]?.v;
-
-if(!nama) return;
-
-html += `
+html+=`
 <div class="produk-card">
 
 <img src="${foto}" class="produk-img">
@@ -286,9 +281,7 @@ html += `
 Rp ${Number(harga).toLocaleString()}
 </div>
 
-<button class="btn-cart">
-+ Keranjang
-</button>
+<button class="btn-cart">+ Keranjang</button>
 
 </div>
 </div>
@@ -296,7 +289,7 @@ Rp ${Number(harga).toLocaleString()}
 
 });
 
-document.getElementById("produkList").innerHTML = html;
+document.getElementById("produkList").innerHTML=html;
 
 });
 
