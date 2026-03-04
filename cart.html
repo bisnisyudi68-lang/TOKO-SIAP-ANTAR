@@ -248,28 +248,69 @@ function hitungOngkir(){
 }
 
 // ================= CHECKOUT =================
+function popup(pesan){
+
+let box = document.createElement("div");
+
+box.style.position="fixed";
+box.style.top="0";
+box.style.left="0";
+box.style.width="100%";
+box.style.height="100%";
+box.style.background="rgba(0,0,0,0.5)";
+box.style.display="flex";
+box.style.alignItems="center";
+box.style.justifyContent="center";
+box.style.zIndex="9999";
+
+box.innerHTML=`
+<div style="background:white;padding:20px;border-radius:12px;width:80%;max-width:300px;text-align:center">
+
+<h3 style="color:#15803d;margin-top:0">TOKO SIAP ANTAR</h3>
+
+<p>${pesan}</p>
+
+<button onclick="this.parentElement.parentElement.remove()"
+style="background:#15803d;color:white;border:none;padding:10px 20px;border-radius:6px">
+OK
+</button>
+
+</div>
+`;
+
+document.body.appendChild(box);
+
+}
 function checkout(){
 
-  if(cart.length===0){ alert("TOKO SIAP ANTAR\n\nKeranjang kosong"); return; }
-  if(!tujuanLat){ alert("TOKO SIAP ANTAR\n\nPilih lokasi pengiriman dulu"); return; }
-
-  let total = 0;
-  let totalItem = 0;
-
-  cart.forEach(p=>{
-    total += p.harga*p.qty;
-    totalItem += p.qty;
-  });
-
-  if(minimalBelanja>0 && total<minimalBelanja){
-    alert("TOKO SIAP ANTAR\n\nMinimal belanja Rp "+rupiah(minimalBelanja));
-    return;
-  }
-
-  let noWa = document.getElementById("waPembeli").value.trim();
-  if(!noWa){ 
-alert("TOKO SIAP ANTAR\n\nIsi nomor WhatsApp dulu"); 
+if(cart.length===0){ 
+popup("Keranjang kosong"); 
 return; 
+}
+
+if(!tujuanLat){ 
+popup("Pilih lokasi pengiriman dulu"); 
+return; 
+}
+
+let total = 0;
+let totalItem = 0;
+
+cart.forEach(p=>{
+total += p.harga*p.qty;
+totalItem += p.qty;
+});
+
+if(minimalBelanja>0 && total<minimalBelanja){
+popup("Minimal belanja Rp "+rupiah(minimalBelanja));
+return;
+}
+
+let noWa = document.getElementById("waPembeli").value.trim();
+
+if(!noWa){
+popup("Isi nomor WhatsApp dulu");
+return;
 }
   // ================= AUTO DATA ORDER =================
   let now = new Date();
