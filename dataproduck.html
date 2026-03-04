@@ -281,6 +281,53 @@ footer{
  border-radius:50px;
  font-size:12px;
 }
+
+.produk-container{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+padding:15px;
+max-width:900px;
+margin:auto;
+}
+
+.produk-card{
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+.produk-img{
+width:100%;
+height:150px;
+object-fit:cover;
+}
+
+.produk-info{
+padding:10px;
+}
+
+.produk-nama{
+font-size:14px;
+font-weight:600;
+margin-bottom:5px;
+}
+
+.produk-harga{
+color:#ff6a00;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+.btn-cart{
+width:100%;
+border:none;
+background:#1faa59;
+color:white;
+padding:8px;
+border-radius:6px;
+}
 }
 </style>
 </head>
@@ -300,6 +347,52 @@ function updateCartCount(){
 }
 
 updateCartCount();
+</script>
+<script>
+
+const sheetURL = "https://docs.google.com/spreadsheets/d/19AfachAS9ZyNuut61RB1wqyI_AI6BsmNT1SIWhmSIn8/gviz/tq?tqx=out:csv&sheet=MEMBER";
+
+fetch(sheetURL)
+.then(res=>res.text())
+.then(data=>{
+
+let rows = data.split("\n").slice(1);
+
+let html="";
+
+rows.forEach(row=>{
+
+let col = row.split(",");
+
+let nama = col[1];
+let harga = col[3];
+let foto = col[5];
+
+html += `
+<div class="produk-card">
+
+<img src="${foto}" class="produk-img">
+
+<div class="produk-info">
+
+<div class="produk-nama">${nama}</div>
+
+<div class="produk-harga">
+Rp ${Number(harga).toLocaleString()}
+</div>
+
+<button class="btn-cart">+ Keranjang</button>
+
+</div>
+</div>
+`;
+
+});
+
+document.getElementById("produkList").innerHTML = html;
+
+});
+
 </script>
 <body>
 
@@ -330,8 +423,9 @@ updateCartCount();
 </div>
   
 <div class="section">
-  <div class="card">
-   
+
+<div id="produkList" class="produk-container"></div>
+
 </div>
 <!-- FOOTER -->
 <div class="footer" style="text-align:center">
